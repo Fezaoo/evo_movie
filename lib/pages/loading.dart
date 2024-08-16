@@ -17,7 +17,7 @@ class _LoadingState extends State<Loading> {
     MovieDb instance = MovieDb();
     var response = await instance.getInitialMovies();
     data = response.toList();
-    Navigator.pushReplacementNamed(context, '/home', arguments: { data });
+    Navigator.pushReplacementNamed(context, '/home', arguments: data );
   }
 
   @override

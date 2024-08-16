@@ -25,29 +25,27 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
 
-    data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as List<Movie>;
+    data = ModalRoute.of(context)?.settings.arguments as List<Movie>;
     return Scaffold(
       backgroundColor: Colors.white12,
+      appBar: AppBar(
+        backgroundColor: Colors.white12,
+        title: Text(
+          'Evo Movie',
+          style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.white),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
           child: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppBar(
-              backgroundColor: Colors.white12,
-              title: Text(
-                'Evo Movie',
-                style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              centerTitle: true,
-            ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+             Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SearchBar(
                     leading: Icon(Icons.search),
@@ -56,25 +54,14 @@ class _HomeState extends State<Home> {
                     });},
                   ),
                   Text(
-                    'testano $search',
+                    'testano ${data[0].title}',
                     style: TextStyle(
                       color: Colors.white,
                     ),
                   ),
-
-                  Container(
-                    padding: EdgeInsets.all(18.0),
-                    margin: EdgeInsets.all(18),
-                    child: Text(
-                      data[0].title,
-                      style: TextStyle(
-                        color: Colors.white
-                      ),
-                    )
-                  )
+                   
                 ],
               )
-            ),
           ],
         ),
       )),
