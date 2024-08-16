@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:evo_movie/services/moviedb.dart';
+
+import '../models/movie.dart';
 
 class Home extends StatefulWidget {
 
@@ -6,11 +9,23 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+
+
 class _HomeState extends State<Home> {
+
+  
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  late List<Movie> data = [Movie(title: '', releaseDate: '')];
   String search = '';
-  String epa = '';
+  
   @override
   Widget build(BuildContext context) {
+
+    data = data.isNotEmpty ? data : ModalRoute.of(context)?.settings.arguments as List<Movie>;
     return Scaffold(
       backgroundColor: Colors.white12,
       body: SafeArea(
@@ -46,6 +61,17 @@ class _HomeState extends State<Home> {
                       color: Colors.white,
                     ),
                   ),
+
+                  Container(
+                    padding: EdgeInsets.all(18.0),
+                    margin: EdgeInsets.all(18),
+                    child: Text(
+                      data[0].title,
+                      style: TextStyle(
+                        color: Colors.white
+                      ),
+                    )
+                  )
                 ],
               )
             ),
