@@ -13,10 +13,10 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
 
   void setupInitialMovies() async{
-    late List<Movie> data;
+
     MovieDb instance = MovieDb();
     var response = await instance.getInitialMovies();
-    data = response.toList();
+    List<Movie> data = response.toList();
     Navigator.pushReplacementNamed(context, '/home', arguments: data );
   }
 

@@ -8,18 +8,33 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+
 class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
   }
 
+  Future<List<Movie>> searchMovies (String query) async {
+    return await instance.searchMovies(query);
+  }
+
   String search = '';
+  MovieDb instance = MovieDb();
+  List<Movie> data = [];
+  String homeSubTitle = 'Filmes em destaque';
+
+
 
   @override
   Widget build(BuildContext context) {
-    List<Movie> data =
-        ModalRoute.of(context)?.settings.arguments as List<Movie>;
+
+    if (data.isEmpty) {
+      data = ModalRoute
+          .of(context)
+          ?.settings
+          .arguments as List<Movie>;
+    }
 
     return Scaffold(
         backgroundColor: Colors.white12,
@@ -35,10 +50,13 @@ class _HomeState extends State<Home> {
         body: SafeArea(
           child: Container(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
                 SearchBar(
                   leading: Icon(Icons.search),
                   onChanged: (query) {
@@ -46,29 +64,71 @@ class _HomeState extends State<Home> {
                       search = query;
                     });
                   },
+                  onSubmitted: (query) async{
+                    print('opaaaa');
+                    var searchResponse = await searchMovies(search);
+                    setState((){
+                      data = searchResponse;
+                      homeSubTitle = ' ${data.length} Filmes econtrados: ';
+                    });
+                  },
                 ),
-                Text(
-                  'testano ${data[0].title}',
-                  style: TextStyle(
-                    color: Colors.white,
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Text(
+                    homeSubTitle,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold
+
+                    ),
+
                   ),
+                ),
+                SizedBox(
+                  height: 20,
                 ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: data.length,
                     itemBuilder: (context, index) {
                       return Card(
-                        child: Text(
-                          data[index].title,
-                          style: TextStyle(color: Colors.black),
+                        child: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  data[index].title,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                              ),
+                              SizedBox(width: 15,),
+                              Text(
+                                data[index].releaseDate,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       );
                     },
                   ),
                 )
-                            ],
-                          ),
-              )),
+              ],
+            ),
+          )),
         ));
   }
 }
