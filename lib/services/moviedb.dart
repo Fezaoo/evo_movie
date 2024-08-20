@@ -12,8 +12,16 @@ class MovieDb {
     List data = bruteData['results'];
     List<Movie> foundMovies = [];
     for (int c = 0; c < data.length; c++){
+      print(data[c]);
       Movie movie = Movie(
-          title: data[c]['title'], releaseDate: data[c]['release_date']);
+        title: data[c]['title'],
+        posterLink: data[c]['poster_path'],
+        releaseDate: data[c]['release_date'],
+        homePage: data[c]['homepage'],
+        overView: data[c]['overview'],
+        runTime: data[c]['runtime'],
+        voteAverage: data[c]['vote_average'],
+      );
       foundMovies.add(movie);
     }
     return foundMovies;
@@ -38,11 +46,20 @@ class MovieDb {
         'https://api.themoviedb.org/3/movie/${stringMovieId}?api_key=${dotenv
             .env['API_KEY']}')));
     Map data = jsonDecode(response.body);
-    Movie movie = Movie(title: '', releaseDate: '');
+    Movie movie = Movie( title:  '', releaseDate: '0000-00-00', overView: '', voteAverage: -1);
     if (data['title'] != null && data['release_date'] != null) {
       movie = Movie(
-          title: data['title'], releaseDate: data['release_date']);
+          title: data['title'],
+          posterLink: data['poster_path'],
+          releaseDate: data['release_date'],
+          homePage: data['homepage'],
+          overView: data['overview'],
+          runTime: data['runtime'],
+          voteAverage: data['vote_average']
+      );
     }
     return movie;
   }
+
+
 }

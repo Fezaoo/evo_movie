@@ -1,3 +1,4 @@
+import 'package:evo_movie/pages/moviedetails.dart';
 import 'package:flutter/material.dart';
 import 'package:evo_movie/services/moviedb.dart';
 
@@ -59,6 +60,7 @@ class _HomeState extends State<Home> {
                 ),
                 SearchBar(
                   leading: Icon(Icons.search),
+                  hintText: 'Star Wars',
                   onChanged: (query) {
                     setState(() {
                       search = query;
@@ -95,31 +97,40 @@ class _HomeState extends State<Home> {
                   child: ListView.builder(
                     itemCount: data.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  data[index].title,
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,MaterialPageRoute(
+                            builder: (context) => MovieDetails(movie: data[index],),
+                          ),);
+                        },
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    data[index].title,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
+                                ),
+                                SizedBox(width: 15,),
+                                if (data[index].releaseDate != null)
+                                Text(
+                                  data[index].releaseDate!.year.toString(),
                                   style: TextStyle(
-                                      color: Colors.black,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                              ),
-                              SizedBox(width: 15,),
-                              Text(
-                                data[index].releaseDate,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14
-                                ),
-                              )
-                            ],
+                                      fontSize: 14,
+                                      color: Colors.black
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       );
