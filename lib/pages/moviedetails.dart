@@ -10,7 +10,6 @@ class MovieDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(movie.posterLink);
     return Scaffold(
         backgroundColor: Colors.white12,
         appBar: AppBar(
@@ -32,7 +31,15 @@ class MovieDetails extends StatelessWidget {
                       children: [
                         if (movie.posterLink != null)
                           Container(
-                            color: Colors.white12,
+                            decoration: movie.backLink != null ?
+                            BoxDecoration(
+                              image: DecorationImage(
+                                colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.7), BlendMode.dstATop),
+                                image: NetworkImage(
+                                  movie.backLink!,
+                                ),
+                              )
+                            ) : null,
                             child: Row(
                               children: [
                                 SizedBox(
@@ -40,10 +47,8 @@ class MovieDetails extends StatelessWidget {
                                 ),
                                 Image.network(
                                   movie.posterLink!,
-                                  // Propriedades opcionais:
-                                  width: 150,
+                                  width: 180,
                                   fit: BoxFit.cover,
-                                  // Ajusta a imagem para cobrir o espaço disponível
                                   loadingBuilder: (context, child, progress) {
                                     return progress == null
                                         ? child
@@ -62,35 +67,58 @@ class MovieDetails extends StatelessWidget {
                         ),
                         // Text('Título:',
                         //     style: Theme.of(context).textTheme.bodyLarge),
-                        Text(movie.title,
-                            style: Theme.of(context).textTheme.bodyLarge),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(movie.title,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
+                            Icon(
+                              Icons.add_sharp,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                        if (movie.voteCount > 0)
                         RatingStars(
                           value: movie.voteAverage,
                           starSize: 15,
                           maxValue: 10,
                           starCount: 10,
                         ),
+                        SizedBox(
+                          height: 20,
+                        ),
 
                         if (movie.releaseDate != null)
-                          Text('Lançamento: ',
+                          // Text('Lançamento: ',
+                          //     style: Theme.of(context).textTheme.bodyLarge),
+                          Text(
+                              '${movie.releaseDate!.day}/${movie.releaseDate!.month}/${movie.releaseDate!.year}',
                               style: Theme.of(context).textTheme.bodyLarge),
-                        Text(
-                            '${movie.releaseDate!.day}/${movie.releaseDate!.month}/${movie.releaseDate!.year}',
-                            style: Theme.of(context).textTheme.bodyMedium),
                         Divider(
                           height: 10,
                         ),
-                        Text('Sinopse:',
-                            style: Theme.of(context).textTheme.bodyLarge),
-                        Container(
-                          decoration: BoxDecoration(
-                              border:
-                                  Border.all(width: 0.8, color: Colors.white),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          padding: EdgeInsets.all(10),
-                          child: Text(movie.overView,
-                              style: Theme.of(context).textTheme.bodyMedium),
+                        if (movie.overView != '')
+                        Column(
+                          crossAxisAlignment:  CrossAxisAlignment.start,
+                          children: [
+                            Text('Sinopse:',
+                                style: Theme.of(context).textTheme.bodyLarge),
+                            Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 0.8, color: Colors.white),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                padding: EdgeInsets.all(10),
+                                child: Text(movie.overView,
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                              ),
+                            ],
                         ),
                         if (movie.runTime != null)
                           Text('Duração: ${movie.runTime} min',

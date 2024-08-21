@@ -29,7 +29,7 @@ class _LoadingState extends State<Loading> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.white12,
       body: Center(
         child: SpinKitFadingCircle(
           size: 60,

@@ -12,17 +12,35 @@ class MovieDb {
     List data = bruteData['results'];
     List<Movie> foundMovies = [];
     for (int c = 0; c < data.length; c++){
-      print(data[c]);
       Movie movie = Movie(
         title: data[c]['title'],
         posterLink: data[c]['poster_path'],
+        backLink: data[c]['backdrop_path'],
         releaseDate: data[c]['release_date'],
         homePage: data[c]['homepage'],
         overView: data[c]['overview'],
         runTime: data[c]['runtime'],
         voteAverage: data[c]['vote_average'],
+        voteCount: data[c]['vote_count'],
       );
       foundMovies.add(movie);
+    }
+    for (int i = 0; i < foundMovies.length; i++){
+      for (int j = i+1; j < foundMovies.length; j++){
+        if (foundMovies[i].releaseDate != null && foundMovies[j].releaseDate != null){
+          int comparison = foundMovies[i].releaseDate!.year.compareTo(foundMovies[j].releaseDate!.year);
+          if (comparison == -1){
+            var aux = foundMovies[i];
+             foundMovies[i] = foundMovies[j];
+             foundMovies[j] = aux;
+          }
+          else if (comparison == 0 && foundMovies[i].title.compareTo(foundMovies[j].title) > 0 ){
+            var aux = foundMovies[i];
+            foundMovies[i] = foundMovies[j];
+            foundMovies[j] = aux;
+          }
+        }
+      }
     }
     return foundMovies;
   }
@@ -43,19 +61,21 @@ class MovieDb {
 
   Future<Movie> getMovie(String stringMovieId) async{
     Response response = await get((Uri.parse(
-        'https://api.themoviedb.org/3/movie/${stringMovieId}?api_key=${dotenv
+        'https://api.themoviedb.org/3/movie/${stringMovieId}?language=pt-BR&api_key=${dotenv
             .env['API_KEY']}')));
     Map data = jsonDecode(response.body);
-    Movie movie = Movie( title:  '', releaseDate: '0000-00-00', overView: '', voteAverage: -1);
+    Movie movie = Movie( title:  '', releaseDate: '0000-00-00', overView: '', voteAverage: -1, voteCount: 0);
     if (data['title'] != null && data['release_date'] != null) {
       movie = Movie(
           title: data['title'],
           posterLink: data['poster_path'],
+          backLink: data['backdrop_path'],
           releaseDate: data['release_date'],
           homePage: data['homepage'],
           overView: data['overview'],
           runTime: data['runtime'],
-          voteAverage: data['vote_average']
+          voteAverage: data['vote_average'],
+          voteCount: data['vote_count'],
       );
     }
     return movie;

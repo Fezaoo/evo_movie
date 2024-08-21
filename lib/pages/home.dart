@@ -67,7 +67,6 @@ class _HomeState extends State<Home> {
                     });
                   },
                   onSubmitted: (query) async{
-                    print('opaaaa');
                     var searchResponse = await searchMovies(search);
                     setState((){
                       data = searchResponse;
